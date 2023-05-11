@@ -11,7 +11,8 @@
 #define ir2 A2
 #define servo 9
 #define ldr A3
-#define led 13
+#define led1 10
+#define led2 11
 #define TemperatureSensor A0
 
 // Define the rows and columns of the keypad
@@ -42,6 +43,8 @@ float volt;
 float temp;
 Servo Serv;
 int btnRead=0;
+int ldrValue;
+int ledValue ;
 void setup()
 {
   // lcd initilizeing
@@ -58,13 +61,15 @@ void setup()
 
   // ldr
   pinMode(ldr, INPUT);
+   // map the LDR value to LED brightness value
+  
   // ir
   pinMode(ir1, INPUT);
   pinMode(ir2, INPUT);
 
   // led
-  pinMode(led, OUTPUT);
-  digitalWrite(led, LOW);
+  pinMode(led1,OUTPUT);
+  pinMode(led2,OUTPUT);
 
   // fan
   pinMode(fan, OUTPUT);
@@ -113,14 +118,10 @@ void loop()
   lcd.setCursor(0, 0);
   TempDisplay();
   // control led with ldr
-  if (analogRead(ldr) > 100)
-  {
-    digitalWrite(led, HIGH);
-  }
-  else
-  {
-    digitalWrite(led, LOW);
-  }
+  ldrValue = analogRead(ldr); // read the value from the LDR
+  ledValue = map(ldrValue, 0, 1023, 0, 255);
+  analogWrite(led1, ledValue); 
+  analogWrite(led2, ledValue); 
   //check btn reading
   //temperature check with fan
   if (temp > 35)
