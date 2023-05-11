@@ -9,8 +9,8 @@
 #define buzzer 6
 #define ir1 A1
 #define ir2 A2
-#define servo A5
-#define ldr 12
+#define servo 9
+#define ldr A3
 #define led 13
 #define TemperatureSensor A0
 
@@ -24,7 +24,7 @@ char keys[ROWS][COLS] = {
     {'1', '2'}};
 
 // Define the pins connected to the keypad rows and columns
-byte rowPins[ROWS] = {0, 2};
+byte rowPins[ROWS] = {0, 1};
 byte colPins[COLS] = {4, 3};
 
 // Initialize the keypad object
@@ -41,7 +41,7 @@ int reading;
 float volt;
 float temp;
 Servo Serv;
-
+int btnRead=0;
 void setup()
 {
   // lcd initilizeing
@@ -72,9 +72,14 @@ void setup()
 
   // btn
   pinMode(btn, INPUT);
+  
   // buzzer
   pinMode(buzzer, OUTPUT);
   digitalWrite(buzzer, LOW);
+
+  pinMode(2, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(2), BuzzerOff, FALLING);
+
   // start of program
   ReadingPassWord();
   // check password untill it is correct
@@ -92,16 +97,14 @@ void setup()
 
 void loop()
 {
-
+  //door system
   if (digitalRead(ir1) == HIGH)
   {
     openDoor(180);
-  }
-  else if (digitalRead(ir2) == HIGH)
+  }else if (digitalRead(ir2) == HIGH)
   {
     openDoor(0);
-  }
-  else
+  }else
   {
     closeDoor();
   }
@@ -118,10 +121,14 @@ void loop()
   {
     digitalWrite(led, LOW);
   }
+  //check btn reading
+  //temperature check with fan
   if (temp > 35)
   {
     digitalWrite(fan, LOW);
-    digitalWrite(buzzer, HIGH);
+    if(btnRead==0){
+      digitalWrite(buzzer, HIGH);
+    }
   }
   else if (temp > 25 && temp < 35)
   {
@@ -132,11 +139,10 @@ void loop()
   {
     digitalWrite(fan, LOW);
   }
-  if (digitalRead(btn) == HIGH)
-  {
-    digitalWrite(buzzer, LOW);
-  }
-  // pwm servo pin
+}
+void BuzzerOff(){
+digitalWrite(buzzer, LOW);
+btnRead =1;
 }
 void openDoor(int f)
 {
