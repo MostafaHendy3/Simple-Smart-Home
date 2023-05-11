@@ -1,8 +1,18 @@
-#include <Wire.h> 
+#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-
 #include <Keypad.h>
 #include <Servo.h>
+
+// Define pins for
+#define fan 5
+#define btn 1
+#define buzzer 6
+#define ir1 A1
+#define ir2 A2
+#define servo A5
+#define ldr 12
+#define led 13
+#define TemperatureSensor A0
 
 // Define the rows and columns of the keypad
 const byte ROWS = 2;
@@ -12,9 +22,7 @@ const byte COLS = 2;
 char keys[ROWS][COLS] = {
     {'4', '3'},
     {'1', '2'}};
-#define fan 5
-#define btn 1
-#define buzzer 6
+
 // Define the pins connected to the keypad rows and columns
 byte rowPins[ROWS] = {0, 2};
 byte colPins[COLS] = {4, 3};
@@ -22,56 +30,56 @@ byte colPins[COLS] = {4, 3};
 // Initialize the keypad object
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
+// PassWord part
 String PassWord = "1234";
 String ReadingPass = "";
-LiquidCrystal_I2C lcd(0x27,20,4); 
-const int TemperatureSensor = A0;
+
+// Lcd Intialize
+LiquidCrystal_I2C lcd(0x27, 20, 4);
+
 int reading;
 float volt;
 float temp;
-#define ir1 A1
-#define ir2 A2
 Servo Serv;
-#define servo A5
-#define ldr 12
-#define led 13
+
 void setup()
 {
-  //lcd initilizeing
+  // lcd initilizeing
   lcd.init();
   lcd.backlight();
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Enter11 Password");
 
-  //servo
+  // servo
   Serv.attach(servo);
   pinMode(servo, OUTPUT);
   digitalWrite(servo, LOW);
 
-  //ldr 
+  // ldr
   pinMode(ldr, INPUT);
-  //ir 
+  // ir
   pinMode(ir1, INPUT);
   pinMode(ir2, INPUT);
 
-  //led
+  // led
   pinMode(led, OUTPUT);
   digitalWrite(led, LOW);
 
-  //fan
+  // fan
   pinMode(fan, OUTPUT);
   digitalWrite(fan, LOW);
 
-  //btn 
+  // btn
   pinMode(btn, INPUT);
-  //buzzer
+  // buzzer
   pinMode(buzzer, OUTPUT);
   digitalWrite(buzzer, LOW);
-  //start of program
+  // start of program
   ReadingPassWord();
   // check password untill it is correct
-  while (checkPassword(ReadingPass) == 0) {
+  while (checkPassword(ReadingPass) == 0)
+  {
     lcd.clear();
     lcd.print("wrong Password");
     lcd.setCursor(0, 1);
@@ -85,7 +93,6 @@ void setup()
 void loop()
 {
 
-  
   if (digitalRead(ir1) == HIGH)
   {
     openDoor(180);
