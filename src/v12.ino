@@ -61,7 +61,7 @@ void setup()
 
   // ldr
   pinMode(ldr, INPUT);
-   // map the LDR value to LED brightness value
+  // map the LDR value to LED brightness value
   
   // ir
   pinMode(ir1, INPUT);
@@ -191,5 +191,7 @@ void TempDisplay()
   temp = reading * 500.0 / 1024;
   lcd.print(temp);
   lcd.setCursor(0, 1);
-  lcd.print("Temperature");
+  float led = (ledValue/255.0)*100.0;
+
+  lcd.print(String(led)+"%");
 }
