@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": "E:/works/SamrtHome Arduino/v12/v12"
+		},
+		{
+			"name": "230507-172720-uno",
+			"path": "../../230507-172720-uno"
+		},
+		{
+			"name": "V13",
+			"path": "../../V13"
+		},
+		{
+			"name": "230507-174234-uno",
+			"path": ".."
+		},
+		{
+			"name": "avr",
+			"path": "../../avr"
+		}
+	],
+	"settings": {}
+}
